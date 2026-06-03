@@ -7,6 +7,7 @@ def ejercicio4():
     for i in range(2, n + 1):
         resultado *= i
     print(f"El factorial de {n} es {resultado}")
-    
+
+
 if __name__ == "__main__":
     ejercicio4()

@@ -8,5 +8,6 @@ def inversor_de_numeros():
     for i in range(cantidad_de_numeros):
         print(numeros[-i - 1])
 
+
 if __name__ == "__main__":
     inversor_de_numeros()

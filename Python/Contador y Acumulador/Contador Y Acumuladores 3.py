@@ -9,8 +9,11 @@ def ejercicio3():
             pares += 1
         else:
             impares += 1
-    
-    print(f"{pares} vehículo(s) tenían patente con terminación par, y {impares} vehículo(s) tenían patente con terminación impar")
+
+    print(
+        f"{pares} vehículo(s) tenían patente con terminación par, y {impares} vehículo(s) tenían patente con terminación impar"
+    )
+
 
 if __name__ == "__main__":
     ejercicio3()

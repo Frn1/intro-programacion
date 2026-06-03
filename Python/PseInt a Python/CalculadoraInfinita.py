@@ -7,16 +7,16 @@ def calculadora_infinita():
         print(" 4. Dividir")
         print(" 5. Salir")
         operacion = int(input("Eliga su operacion: "))
-        
+
         if operacion == 5:
             break
         elif operacion < 1 or operacion > 5:
             print("No reconozco esa operacion")
             continue
-        
+
         num1 = float(input("Escriba el primer numero: "))
         num2 = float(input("Escriba el segundo numero: "))
-        
+
         match operacion:
             case 1:
                 print(f"Su resultado es {num1 + num2}")
@@ -29,6 +29,7 @@ def calculadora_infinita():
                     print("No se puede dividir por 0")
                 else:
                     print(f"Su resultado es {num1 / num2}")
+
 
 if __name__ == "__main__":
     calculadora_infinita()

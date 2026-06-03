@@ -11,15 +11,16 @@ def temperaturas_a_texto(lista: list) -> str:
                 salida += ", "
     return salida
 
+
 def registro_de_temperaturas():
     temperaturas = []
-    
+
     cantidad_de_temperaturas = 7
     print(f"Ingrese las {cantidad_de_temperaturas} temperaturas")
     for i in range(cantidad_de_temperaturas):
         temperatura_ingresada = float(input(f"Ingrese el la temperatura {i + 1}: "))
         temperaturas.append(temperatura_ingresada)
-    
+
     while True:
         print("\n--- Menu ---")
         print(" 1. Ver todas las temperaturas")
@@ -27,7 +28,7 @@ def registro_de_temperaturas():
         print(" 3. Ver el día más caluroso")
         print(" 4. Salir")
         seleccion = int(input("Su selección: "))
-        
+
         match seleccion:
             case 1:
                 print(f"Las temperaturas son {temperaturas_a_texto(temperaturas)}")
@@ -47,6 +48,7 @@ def registro_de_temperaturas():
                 break
             case _:
                 print("No reconozco esa opción")
+
 
 if __name__ == "__main__":
     registro_de_temperaturas()

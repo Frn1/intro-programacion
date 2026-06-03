@@ -3,6 +3,7 @@ class Producto:
         self.nombre = nombre
         self.precio = precio
 
+
 def maquina_expendedora():
     productos = [
         Producto("Coca-cola", 1200),
@@ -11,7 +12,7 @@ def maquina_expendedora():
         Producto("Fanta", 20),
         Producto("Manaos", 1000),
     ]
-    
+
     print("--- Máquina expendedora ---")
     print("Producto:")
     for i in range(len(productos)):
@@ -24,7 +25,7 @@ def maquina_expendedora():
 
     print(f"\nUsted eligió {productos[productoElegido].nombre}.")
     print(f"Debe pagar {productos[productoElegido].precio} pesos.")
-    
+
 
 if __name__ == "__main__":
     maquina_expendedora()
