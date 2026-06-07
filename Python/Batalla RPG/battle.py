@@ -5,36 +5,36 @@ from random import shuffle
 
 class Entity(ABC):
     name: str
-    _health: float
-    _max_health: float
+    _health: int
+    _max_health: int
 
-    def __init__(self, name: str, max_health: float) -> None:
+    def __init__(self, name: str, max_health: int) -> None:
         super().__init__()
         self.name = name
         self._max_health = max_health
         self._health = self._max_health
 
-    def __add__(self, value: float):
+    def __add__(self, value: int):
         self._health += value
         if self._health < 0:
             self._health = 0
         elif self._health > self._max_health:
             self._health = self._max_health
 
-    def __sub__(self, value: float):
+    def __sub__(self, value: int):
         self._health -= value
         if self._health < 0:
             self._health = 0
         elif self._health > self._max_health:
             self._health = self._max_health
 
-    def get_health(self) -> float:
+    def get_health(self) -> int:
         return self._health
 
-    def get_max_health(self) -> float:
+    def get_max_health(self) -> int:
         return self._max_health
 
-    def damage(self, damage):
+    def apply_damage(self, damage):
         if damage <= 0:
             return
         self._health -= damage
@@ -63,13 +63,13 @@ class Entity(ABC):
 
 
 class Character(Entity, ABC):
-    def __init__(self, name: str, max_health: float) -> None:
+    def __init__(self, name: str, max_health: int) -> None:
         super().__init__(name, max_health)
 
     def __str__(self) -> str:
         if self.is_dead():
-            return f"Personaje {self.name} - Muerto"
-        return f"Personaje {self.name} - {round(self.get_health_percentage() * 100.0)}% ({round(self.get_health())}/{round(self.get_max_health())})"
+            return f"{self.name} - Muerto"
+        return f"{self.name} - {round(self.get_health_percentage() * 100.0)}% ({round(self.get_health())}/{round(self.get_max_health())})"
 
     @abstractmethod
     def act(self, battle: "Battle"):
@@ -77,13 +77,13 @@ class Character(Entity, ABC):
 
 
 class Enemy(Entity, ABC):
-    def __init__(self, name: str, max_health: float) -> None:
+    def __init__(self, name: str, max_health: int) -> None:
         super().__init__(name, max_health)
 
     def __str__(self) -> str:
         if self.is_dead():
-            return f"Enemigo {self.name} - Muerto"
-        return f"Enemigo {self.name} - {round(self.get_health_percentage() * 100.0)}%"
+            return f'Enemigo "{self.name}" - Muerto'
+        return f'Enemigo "{self.name}" - {round(self.get_health_percentage() * 100.0)}%'
 
     @abstractmethod
     def act(self, battle: "Battle"):
@@ -103,11 +103,15 @@ class _NextTurnOrder:
         return self
 
     def __next__(self):
-        if self._current < len(self._turn_order):
+        while self._current < len(self._turn_order):
             result = self._turn_order[
                 (self._initial_turn_number + self._current) % len(self._turn_order)
-            ]
+            ]()
+            if result is None:
+                continue
             self._current += 1
+            if result.is_dead():
+                continue
             return result
         else:
             # Tell the loop construct that iteration is complete
@@ -130,18 +134,18 @@ class Battle:
         self._enemies = enemies
 
         self._turn_order = []
-        for character in characters:
-            self._turn_order.append(weakref.ref(character))
         for enemy in enemies:
             self._turn_order.append(weakref.ref(enemy))
         shuffle(self._turn_order)
+        for character in characters:
+            self._turn_order.insert(0, weakref.ref(character))
 
     def get_enemies(self) -> list[Enemy]:
         return self._enemies
 
     def get_alive_enemies(self) -> list[Enemy]:
         result = list(self._enemies)
-        for i in range(len(self._enemies) - 1, 0, -1):
+        for i in range(len(self._enemies) - 1, -1, -1):
             if self._enemies[i].is_dead():
                 result.pop(i)
         return result
@@ -151,7 +155,7 @@ class Battle:
 
     def get_alive_characters(self) -> list[Character]:
         result = list(self._characters)
-        for i in range(len(self._characters) - 1, 0, -1):
+        for i in range(len(self._characters) - 1, -1, -1):
             if self._characters[i].is_dead():
                 result.pop(i)
         return result
